@@ -461,7 +461,12 @@ if (carousel && track) {
         actualizarPosiciones();
     }
 
-    var intervaloConvenios = setInterval(siguiente, 7000);
+    // Dispara la primera transición animada inmediatamente al cargar
+    siguiente();
+
+    // Luego inicia el ciclo automático
+    var intervaloConvenios = setInterval(siguiente, 5000);
+
     carousel.addEventListener('mouseenter', function () { clearInterval(intervaloConvenios); });
     carousel.addEventListener('mouseleave', function () { intervaloConvenios = setInterval(siguiente, 2000); });
 

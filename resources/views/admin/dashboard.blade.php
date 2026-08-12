@@ -246,26 +246,36 @@
                 <i class="bi bi-lightning-charge me-2 text-muted"></i>Accesos rápidos
             </h6>
             <div class="d-flex flex-column gap-2">
+                @if(auth()->user()->esAdmin() || auth()->user()->esEditor())
                 <a href="{{ route('comunicados.create') }}" class="quick-btn">
                     <i class="bi bi-plus-circle"></i> Nuevo comunicado
                     <i class="bi bi-chevron-right quick-arrow"></i>
                 </a>
+                @endif
+                @if(auth()->user()->esAdmin() || auth()->user()->esEditor())
                 <a href="{{ route('servicios.index') }}" class="quick-btn">
                     <i class="bi bi-building"></i> Gestionar servicios
                     <i class="bi bi-chevron-right quick-arrow"></i>
                 </a>
+                @endif
+                @if(auth()->user()->esAdmin() || auth()->user()->esEditor())
                 <a href="{{ route('convenios.index') }}" class="quick-btn">
                     <i class="bi bi-handshake"></i> Gestionar convenios
                     <i class="bi bi-chevron-right quick-arrow"></i>
                 </a>
+                @endif
+                @if(auth()->user()->esAdmin() || auth()->user()->esEditor())
                 <a href="{{ route('filiales.index') }}" class="quick-btn">
                     <i class="bi bi-geo-alt"></i> Ver filiales
                     <i class="bi bi-chevron-right quick-arrow"></i>
                 </a>
+                @endif
+                @if(auth()->user()->esAdmin() || auth()->user()->esEditor())
                 <a href="{{ route('informes-anuales.index') }}" class="quick-btn">
                     <i class="bi bi-file-earmark-pdf"></i> Informes anuales
                     <i class="bi bi-chevron-right quick-arrow"></i>
                 </a>
+                @endif
                 @if(auth()->user()->esAdmin())
                     <a href="{{ route('usuarios.index') }}" class="quick-btn">
                         <i class="bi bi-people"></i> Gestionar usuarios

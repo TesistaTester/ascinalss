@@ -37,6 +37,6 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 #antes
-#CMD ["apache2-foreground"]
+CMD ["apache2-foreground"]
 #ahora
-CMD ["/bin/bash", "/var/www/html/docker/start.sh"]
+#CMD ["/bin/bash", "/var/www/html/docker/start.sh"]

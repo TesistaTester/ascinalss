@@ -10,6 +10,7 @@ use App\Models\Convenio;
 use App\Models\Filial;
 use App\Models\InformeAnual;
 use App\Models\Servicio;
+use App\Models\ProductoSimulador;
 
 class PublicoController extends Controller
 {
@@ -18,6 +19,10 @@ class PublicoController extends Controller
         $servicios = Servicio::where('ser_estado', true)->orderBy('ser_orden')->get();
         $convenios = Convenio::where('conv_estado', true)->orderBy('conv_orden')->get();
         $categoriasPrestamo = CategoriaPrestamo::where('cat_estado', true)->orderBy('cat_orden')->with('documentos')->get();
+        $productosSimulador = ProductoSimulador::where('pro_activo', true)
+            ->where(function ($query) { $query->whereNull('pro_vigente_desde')->orWhere('pro_vigente_desde', '<=', now()); })
+            ->where(function ($query) { $query->whereNull('pro_vigente_hasta')->orWhere('pro_vigente_hasta', '>=', now()); })
+            ->orderBy('pro_id')->get();
 
         $comunicadosModales = Comunicado::where('com_estado', true)
             ->where('com_tipo', 'modal')
@@ -28,7 +33,7 @@ class PublicoController extends Controller
         $contacto = $this->datosContacto();
 
         return view('publico.index', compact(
-            'servicios', 'convenios', 'categoriasPrestamo',
+            'servicios', 'convenios', 'categoriasPrestamo', 'productosSimulador',
             'comunicadosModales', 'heroSlogan', 'contacto'
         ));
     }

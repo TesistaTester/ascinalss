@@ -682,3 +682,94 @@ if (informesHeroBg) {
         }
     });
 }
+
+// Simulador de préstamos
+var modalSimulador = document.getElementById('modalSimulador');
+var abrirSimulador = document.getElementById('abrirSimulador');
+var cerrarSimulador = document.getElementById('cerrarSimulador');
+var formSimulador = document.getElementById('formSimulador');
+
+if (modalSimulador && abrirSimulador && cerrarSimulador && formSimulador) {
+    var productoSim = document.getElementById('simProducto');
+    var montoSim = document.getElementById('simMonto');
+    var plazoSim = document.getElementById('simPlazo');
+    var plazoValorSim = document.getElementById('simPlazoValor');
+    var aniosGrupoSim = document.getElementById('simAniosGrupo');
+    var aniosSim = document.getElementById('simAnios');
+    var limitesSim = document.getElementById('simLimites');
+    var erroresSim = document.getElementById('simErrores');
+    var resultadoSim = document.getElementById('simResultado');
+
+    function monedaSim(valor) {
+        return new Intl.NumberFormat('es-BO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Number(valor));
+    }
+
+    function actualizarProductoSim() {
+        var opcion = productoSim.options[productoSim.selectedIndex];
+        var maximo = Number(opcion.dataset.maximo);
+        var minimo = Number(opcion.dataset.minimo || 1);
+        var plazoMaximo = Number(opcion.dataset.plazoMaximo);
+        var plazoMinimo = Number(opcion.dataset.plazoMinimo || 1);
+        montoSim.min = minimo; montoSim.max = maximo;
+        plazoSim.min = plazoMinimo; plazoSim.max = plazoMaximo;
+        if (Number(plazoSim.value) < plazoMinimo || Number(plazoSim.value) > plazoMaximo) plazoSim.value = Math.min(12, plazoMaximo);
+        plazoValorSim.textContent = plazoSim.value;
+        limitesSim.textContent = 'Hasta Bs ' + monedaSim(maximo) + ' · Plazo máximo: ' + plazoMaximo + ' meses';
+        var requiereAnios = opcion.dataset.antiguedad === '1';
+        aniosGrupoSim.hidden = !requiereAnios;
+        aniosSim.required = requiereAnios;
+        if (!requiereAnios) aniosSim.value = '';
+        resultadoSim.hidden = true; erroresSim.hidden = true;
+    }
+
+    function abrirModalSim() {
+        modalSimulador.classList.add('open');
+        modalSimulador.setAttribute('aria-hidden', 'false');
+        gsap.to(modalSimulador, { opacity: 1, visibility: 'visible', duration: .25 });
+        gsap.fromTo(modalSimulador.querySelector('.modal-box'), { scale: .94, opacity: 0 }, { scale: 1, opacity: 1, duration: .3, ease: 'back.out(1.25)' });
+        actualizarProductoSim();
+        productoSim.focus();
+    }
+
+    function cerrarModalSim() {
+        gsap.to(modalSimulador, { opacity: 0, duration: .2, onComplete: function () {
+            modalSimulador.classList.remove('open'); modalSimulador.style.visibility = 'hidden'; modalSimulador.setAttribute('aria-hidden', 'true');
+        }});
+    }
+
+    abrirSimulador.addEventListener('click', abrirModalSim);
+    cerrarSimulador.addEventListener('click', cerrarModalSim);
+    modalSimulador.addEventListener('click', function (e) { if (e.target === modalSimulador) cerrarModalSim(); });
+    productoSim.addEventListener('change', actualizarProductoSim);
+    plazoSim.addEventListener('input', function () { plazoValorSim.textContent = plazoSim.value; });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modalSimulador.classList.contains('open')) cerrarModalSim(); });
+
+    formSimulador.addEventListener('submit', function (e) {
+        e.preventDefault(); erroresSim.hidden = true; resultadoSim.hidden = true;
+        if (!formSimulador.reportValidity()) return;
+        var boton = formSimulador.querySelector('button[type="submit"]');
+        boton.disabled = true; boton.textContent = 'Calculando...';
+        fetch(formSimulador.action, {
+            method: 'POST', headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+            body: new FormData(formSimulador)
+        }).then(function (response) {
+            return response.json().then(function (data) { if (!response.ok) throw data; return data; });
+        }).then(function (data) {
+            var resumen = '';
+            if (data.monto_solicitado !== undefined) {
+                resumen = '<div class="simulador-resumen">' +
+                    '<div class="simulador-dato">Monto solicitado<strong>Bs ' + monedaSim(data.monto_solicitado) + '</strong></div>' +
+                    '<div class="simulador-dato">Plazo<strong>' + data.plazo + ' meses</strong></div>' +
+                    '<div class="simulador-dato">Cuota mensual estimada<strong>Bs ' + monedaSim(data.cuota_mensual) + '</strong></div>' +
+                    '<div class="simulador-dato">Monto máximo estimado<strong>Bs ' + monedaSim(data.monto_maximo_estimado) + '</strong></div></div>';
+            }
+            resultadoSim.innerHTML = '<h4>Resultado de tu simulación</h4>' + resumen + '<p class="simulador-mensaje">' + data.mensaje + '</p>';
+            resultadoSim.hidden = false;
+        }).catch(function (error) {
+            var mensajes = error.errors ? Object.values(error.errors).flat().join(' ') : (error.message || 'No fue posible realizar la simulación. Intenta nuevamente.');
+            erroresSim.textContent = mensajes; erroresSim.hidden = false;
+        }).finally(function () {
+            boton.disabled = false; boton.innerHTML = '<i class="fa-solid fa-calculator"></i> Calcular préstamo';
+        });
+    });
+}

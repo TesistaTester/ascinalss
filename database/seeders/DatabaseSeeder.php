@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             InformeAnualSeeder::class,
             CategoriaPrestamoSeeder::class,
             ComunicadoSeeder::class,
+            ProductoSimuladorSeeder::class,
         ]);
     }
 }

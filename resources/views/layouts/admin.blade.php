@@ -236,6 +236,12 @@
             @if(auth()->user()->esAdmin())
                 <span class="sidebar-section-label">Administración</span>
                 <li>
+                    <a href="{{ route('simulador-prestamos.index') }}"
+                       class="nav-link {{ request()->routeIs('simulador-prestamos.*') ? 'active' : '' }}">
+                        <i class="bi bi-calculator"></i> Simulador de Préstamos
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('usuarios.index') }}"
                        class="nav-link {{ request()->routeIs('usuarios.*') ? 'active' : '' }}">
                         <i class="bi bi-people"></i> Usuarios

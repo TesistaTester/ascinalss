@@ -64,6 +64,11 @@
         <div class="section-head">
             <p class="eyebrow">Apoyo Económico</p>
             <h2 class="split-title">Préstamos pensados para ti</h2>
+            @if($productosSimulador->isNotEmpty())
+                <button type="button" class="btn btn-simulador" id="abrirSimulador" reveal>
+                    <i class="fa-solid fa-calculator"></i> Calcula tu préstamo
+                </button>
+            @endif
         </div>
 
         <div class="cards cards-prestamo">
@@ -214,6 +219,47 @@
 
 
 {{-- Modal de detalle de servicio --}}
+@if($productosSimulador->isNotEmpty())
+<div class="modal-overlay simulador-overlay" id="modalSimulador" aria-hidden="true">
+    <div class="modal-box simulador-modal" role="dialog" aria-modal="true" aria-labelledby="simTitulo">
+        <button type="button" class="cerrar" id="cerrarSimulador" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+        <div class="simulador-cabecera">
+            <span class="simulador-icono"><i class="fa-solid fa-calculator"></i></span>
+            <div><p class="servicio-eyebrow">Simulador referencial</p><h3 id="simTitulo">Calcula tu préstamo</h3></div>
+        </div>
+        <form id="formSimulador" action="{{ route('prestamos.simular') }}" novalidate>
+            @csrf
+            <div class="simulador-grid">
+                <div class="simulador-campo simulador-campo-completo">
+                    <label for="simProducto">Tipo de préstamo</label>
+                    <select id="simProducto" name="producto" required>
+                        @foreach($productosSimulador as $producto)
+                            <option value="{{ $producto->pro_codigo }}"
+                                data-maximo="{{ $producto->pro_monto_maximo }}"
+                                data-minimo="{{ $producto->pro_monto_minimo ?? 1 }}"
+                                data-plazo-maximo="{{ $producto->pro_plazo_maximo_meses }}"
+                                data-plazo-minimo="{{ $producto->pro_plazo_minimo_meses ?? 1 }}"
+                                data-antiguedad="{{ $producto->pro_considera_antiguedad ? 1 : 0 }}">
+                                {{ $producto->pro_nombre }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <div class="simulador-limites" id="simLimites"></div>
+                </div>
+                <div class="simulador-campo"><label for="simLiquido">Líquido pagable de tu última boleta</label><div class="campo-moneda"><span>Bs</span><input type="number" id="simLiquido" name="liquido_pagable" min="0.01" step="0.01" required></div></div>
+                <div class="simulador-campo" id="simAniosGrupo" hidden><label for="simAnios">Años de servicio</label><input type="number" id="simAnios" name="anios_servicio" min="1" max="60"></div>
+                <div class="simulador-campo"><label for="simMonto">¿Cuánto deseas solicitar?</label><div class="campo-moneda"><span>Bs</span><input type="number" id="simMonto" name="monto_solicitado" min="1" step="0.01" required></div></div>
+                <div class="simulador-campo"><label for="simPlazo">Plazo: <strong><span id="simPlazoValor"></span> meses</strong></label><input type="range" id="simPlazo" name="plazo" min="1" max="180" value="12"></div>
+            </div>
+            <div class="simulador-errores" id="simErrores" hidden></div>
+            <button type="submit" class="btn simulador-calcular"><i class="fa-solid fa-calculator"></i> Calcular préstamo</button>
+        </form>
+        <div class="simulador-resultado" id="simResultado" hidden aria-live="polite"></div>
+        <p class="simulador-legal">Esta simulación tiene carácter referencial y no constituye una aprobación ni una oferta definitiva de préstamo. El monto, plazo, tasa, cuota y demás condiciones están sujetos a la calificación y condiciones vigentes de ASCINALSS.</p>
+    </div>
+</div>
+@endif
+
 <div class="modal-overlay modal-servicio-overlay" id="modalServicio">
     <div class="modal-box modal-servicio">
         <button class="cerrar" id="cerrarModalServicio"><i class="fa-solid fa-xmark"></i></button>

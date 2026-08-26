@@ -11,6 +11,8 @@ use App\Http\Controllers\CategoriaPrestamoController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\DocumentoPrestamoController;
 use App\Http\Controllers\PublicoController;
+use App\Http\Controllers\SimuladorPrestamoController;
+use App\Http\Controllers\ConfiguracionSimuladorController;
 
 /*
 ----------------------------------------
@@ -21,6 +23,7 @@ Route::get('/', [PublicoController::class, 'index'])->name('publico.inicio');
 Route::get('/web/filiales', [PublicoController::class, 'filiales'])->name('publico.filiales');
 Route::get('/web/comunicados', [PublicoController::class, 'comunicados'])->name('publico.comunicados');
 Route::get('/web/informe-anual', [PublicoController::class, 'informeAnual'])->name('publico.informe-anual');
+Route::post('/prestamos/simular', [SimuladorPrestamoController::class, 'simular'])->name('prestamos.simular');
 /*
 ----------------------------------------
 * RUTAS: AUTENTICACIÓN
@@ -61,6 +64,8 @@ Route::middleware(['auth'])->group(function () {
     // Solo Admin (1) gestiona usuarios
     Route::middleware('rol:1')->group(function () {
         Route::resource('/usuarios', UsuarioController::class);
+        Route::get('/configuracion/simulador-prestamos', [ConfiguracionSimuladorController::class, 'index'])->name('simulador-prestamos.index');
+        Route::put('/configuracion/simulador-prestamos/{producto}', [ConfiguracionSimuladorController::class, 'update'])->name('simulador-prestamos.update');
     });
 
     // Directorio (3) y Admin (1) ven el dashboard con reportes/resumen

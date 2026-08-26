@@ -1161,3 +1161,32 @@ ESTILOS PAGINA INFORMES
     }
     .informe-row:hover { padding-left: 6px; }
 }
+/* Simulador de préstamos */
+.btn-simulador { margin-top: 22px; border: 0; cursor: pointer; display: inline-flex; gap: 9px; align-items: center; }
+.simulador-overlay { padding: 20px; z-index: 1200; }
+.simulador-modal { width: min(980px, 100%); max-width: 980px; max-height: calc(100vh - 40px); overflow-y: auto; padding: 38px 42px; color: #f7f9fc; }
+.simulador-cabecera { display: flex; gap: 14px; align-items: center; margin-bottom: 24px; padding-right: 35px; }
+.simulador-cabecera h3 { margin: 2px 0 0; font-size: 30px; color: #fff; line-height: 1.15; }
+.simulador-cabecera p { margin: 0; color: #e0c088; }
+.simulador-icono { width: 58px; height: 58px; border-radius: 50%; background: rgba(201,161,90,.18); color: #e0c088; display: grid; place-items: center; font-size: 24px; flex: 0 0 auto; }
+.simulador-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.simulador-campo-completo { grid-column: 1 / -1; }
+.simulador-campo label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #f1f4f9; }
+.simulador-campo label strong { color: #e0c088; }
+.simulador-campo input, .simulador-campo select { width: 100%; border: 1px solid #d8dee8; border-radius: 10px; padding: 11px 12px; background: #fff; color: #182231; font: inherit; }
+.simulador-campo input:focus, .simulador-campo select:focus { outline: 2px solid rgba(201,161,90,.25); border-color: #c9a15a; }
+.campo-moneda { display: flex; border: 1px solid #d8dee8; border-radius: 10px; overflow: hidden; background: #fff; }
+.campo-moneda span { padding: 11px 12px; background: #f2f4f7; color: #667085; font-weight: 700; }
+.campo-moneda input { border: 0; border-radius: 0; }
+.simulador-limites { margin-top: 9px; font-size: 13px; color: rgba(255,255,255,.72); }
+.simulador-calcular { border: 0; cursor: pointer; margin-top: 22px; width: 100%; justify-content: center; display: flex; gap: 8px; }
+.simulador-calcular:disabled { opacity: .65; cursor: wait; }
+.simulador-errores { margin-top: 16px; padding: 12px 14px; border-radius: 10px; background: #fff0f0; color: #a12424; font-size: 13px; }
+.simulador-resultado { margin-top: 22px; padding: 20px; border-radius: 14px; background: #f5f7fa; border-left: 4px solid #c9a15a; }
+.simulador-resultado h4 { margin: 0 0 14px; color: #182231; }
+.simulador-resumen { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.simulador-dato { background: #fff; border-radius: 9px; padding: 10px 12px; font-size: 12px; color: #667085; }
+.simulador-dato strong { display: block; color: #182231; font-size: 17px; margin-top: 3px; }
+.simulador-mensaje { margin: 14px 0 0; font-weight: 600; color: #344054 !important; }
+.simulador-legal { font-size: 12px !important; color: rgba(255,255,255,.72) !important; line-height: 1.55; margin: 20px 0 0; }
+@media (max-width: 600px) { .simulador-modal { padding: 28px 20px; } .simulador-cabecera h3 { font-size: 25px; } .simulador-grid, .simulador-resumen { grid-template-columns: 1fr; } .simulador-campo-completo { grid-column: auto; } }

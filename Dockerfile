@@ -36,4 +36,7 @@ RUN composer install --no-dev --optimize-autoloader
 # Permisos Laravel
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-CMD ["apache2-foreground"]
+#antes
+#CMD ["apache2-foreground"]
+#ahora
+CMD ["/bin/bash", "/var/www/html/docker/start.sh"]

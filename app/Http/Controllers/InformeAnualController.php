@@ -30,7 +30,7 @@ class InformeAnualController extends Controller
             'inf_estado' => 'nullable|boolean',
         ]);
 
-        $datos['inf_pdf_archivo'] = $request->file('inf_pdf_archivo')->store('informes-anuales', 'public');
+        $datos['inf_pdf_archivo'] = $request->file('inf_pdf_archivo')->store('informes-anuales', config('filesystems.default'));
         $datos['inf_estado'] = $request->boolean('inf_estado', true);
 
         InformeAnual::create($datos);
@@ -55,9 +55,9 @@ class InformeAnualController extends Controller
 
         if ($request->hasFile('inf_pdf_archivo')) {
             if ($informesAnuale->inf_pdf_archivo) {
-                Storage::disk('public')->delete($informesAnuale->inf_pdf_archivo);
+                Storage::disk(config('filesystems.default'))->delete($informesAnuale->inf_pdf_archivo);
             }
-            $datos['inf_pdf_archivo'] = $request->file('inf_pdf_archivo')->store('informes-anuales', 'public');
+            $datos['inf_pdf_archivo'] = $request->file('inf_pdf_archivo')->store('informes-anuales', config('filesystems.default'));
         }
 
         $datos['inf_estado'] = $request->boolean('inf_estado', true);
@@ -70,7 +70,7 @@ class InformeAnualController extends Controller
     public function destroy(InformeAnual $informesAnuale)
     {
         if ($informesAnuale->inf_pdf_archivo) {
-            Storage::disk('public')->delete($informesAnuale->inf_pdf_archivo);
+            Storage::disk(config('filesystems.default'))->delete($informesAnuale->inf_pdf_archivo);
         }
 
         $informesAnuale->delete();

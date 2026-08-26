@@ -19,7 +19,7 @@ class DocumentoPrestamoController extends Controller
             'doc_orden' => 'nullable|integer',
         ]);
 
-        $datos['doc_pdf_archivo'] = $request->file('doc_pdf_archivo')->store('prestamos/documentos', 'public');
+        $datos['doc_pdf_archivo'] = $request->file('doc_pdf_archivo')->store('prestamos/documentos', config('filesystems.default'));
         $datos['doc_categoria_id'] = $categoriasPrestamo->cat_id;
         $datos['doc_estado'] = true;
         $datos['doc_orden'] = $datos['doc_orden'] ?? 0;
@@ -32,7 +32,7 @@ class DocumentoPrestamoController extends Controller
     public function destroy(DocumentoPrestamo $documento)
     {
         if ($documento->doc_pdf_archivo) {
-            Storage::disk('public')->delete($documento->doc_pdf_archivo);
+            Storage::disk(config('filesystems.default'))->delete($documento->doc_pdf_archivo);
         }
 
         $documento->delete();

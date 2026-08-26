@@ -44,7 +44,7 @@ class ImportarArchivosAscinalss extends Command
      */
     private function descargar(string $urlRelativa, string $rutaDestino, bool $forzar): bool
     {
-        if (!$forzar && Storage::disk('public')->exists($rutaDestino)) {
+        if (!$forzar && Storage::disk(config('filesystems.default'))->exists($rutaDestino)) {
             $this->line("  ↷ Ya existe, se omite: {$rutaDestino}");
             return true;
         }
@@ -60,7 +60,7 @@ class ImportarArchivosAscinalss extends Command
                 return false;
             }
 
-            Storage::disk('public')->put($rutaDestino, $respuesta->body());
+            Storage::disk(config('filesystems.default'))->put($rutaDestino, $respuesta->body());
             $this->info("  ✓ Descargado: {$rutaDestino}");
             return true;
         } catch (\Throwable $e) {

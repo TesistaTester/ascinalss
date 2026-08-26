@@ -34,7 +34,7 @@ class ServicioController extends Controller
         ]);
 
         if ($request->hasFile('ser_imagen')) {
-            $datos['ser_imagen'] = $request->file('ser_imagen')->store('servicios', 'public');
+            $datos['ser_imagen'] = $request->file('ser_imagen')->store('servicios', config('filesystems.default'));
         }
 
         $datos['ser_estado'] = $request->boolean('ser_estado', true);
@@ -65,9 +65,9 @@ class ServicioController extends Controller
 
         if ($request->hasFile('ser_imagen')) {
             if ($servicio->ser_imagen) {
-                Storage::disk('public')->delete($servicio->ser_imagen);
+                Storage::disk(config('filesystems.default'))->delete($servicio->ser_imagen);
             }
-            $datos['ser_imagen'] = $request->file('ser_imagen')->store('servicios', 'public');
+            $datos['ser_imagen'] = $request->file('ser_imagen')->store('servicios', config('filesystems.default'));
         }
 
         $datos['ser_estado'] = $request->boolean('ser_estado', true);
@@ -80,7 +80,7 @@ class ServicioController extends Controller
     public function destroy(Servicio $servicio)
     {
         if ($servicio->ser_imagen) {
-            Storage::disk('public')->delete($servicio->ser_imagen);
+            Storage::disk(config('filesystems.default'))->delete($servicio->ser_imagen);
         }
 
         $servicio->delete();

@@ -40,15 +40,15 @@ class ComunicadoController extends Controller
         ]);
 
         if ($request->hasFile('com_imagen')) {
-            $datos['com_imagen'] = $request->file('com_imagen')->store('comunicados/imagenes', 'public');
+            $datos['com_imagen'] = $request->file('com_imagen')->store('comunicados/imagenes', config('filesystems.default'));
         }
 
         if ($request->hasFile('com_pdf_archivo')) {
-            $datos['com_pdf_archivo'] = $request->file('com_pdf_archivo')->store('comunicados/pdfs', 'public');
+            $datos['com_pdf_archivo'] = $request->file('com_pdf_archivo')->store('comunicados/pdfs', config('filesystems.default'));
         }
 
         if ($request->hasFile('com_pptx_archivo')) {
-            $datos['com_pptx_archivo'] = $request->file('com_pptx_archivo')->store('comunicados/presentaciones', 'public');
+            $datos['com_pptx_archivo'] = $request->file('com_pptx_archivo')->store('comunicados/presentaciones', config('filesystems.default'));
         }
 
         $datos['com_usuario_id'] = auth()->id();
@@ -81,23 +81,23 @@ class ComunicadoController extends Controller
 
         if ($request->hasFile('com_imagen')) {
             if ($comunicado->com_imagen) {
-                Storage::disk('public')->delete($comunicado->com_imagen);
+                Storage::disk(config('filesystems.default'))->delete($comunicado->com_imagen);
             }
-            $datos['com_imagen'] = $request->file('com_imagen')->store('comunicados/imagenes', 'public');
+            $datos['com_imagen'] = $request->file('com_imagen')->store('comunicados/imagenes', config('filesystems.default'));
         }
 
         if ($request->hasFile('com_pdf_archivo')) {
             if ($comunicado->com_pdf_archivo) {
-                Storage::disk('public')->delete($comunicado->com_pdf_archivo);
+                Storage::disk(config('filesystems.default'))->delete($comunicado->com_pdf_archivo);
             }
-            $datos['com_pdf_archivo'] = $request->file('com_pdf_archivo')->store('comunicados/pdfs', 'public');
+            $datos['com_pdf_archivo'] = $request->file('com_pdf_archivo')->store('comunicados/pdfs', config('filesystems.default'));
         }
 
         if ($request->hasFile('com_pptx_archivo')) {
             if ($comunicado->com_pptx_archivo) {
-                Storage::disk('public')->delete($comunicado->com_pptx_archivo);
+                Storage::disk(config('filesystems.default'))->delete($comunicado->com_pptx_archivo);
             }
-            $datos['com_pptx_archivo'] = $request->file('com_pptx_archivo')->store('comunicados/presentaciones', 'public');
+            $datos['com_pptx_archivo'] = $request->file('com_pptx_archivo')->store('comunicados/presentaciones', config('filesystems.default'));
         }
 
         $datos['com_fijado'] = $request->boolean('com_fijado');
@@ -111,7 +111,7 @@ class ComunicadoController extends Controller
     {
         foreach (['com_imagen', 'com_pdf_archivo', 'com_pptx_archivo'] as $campo) {
             if ($comunicado->{$campo}) {
-                Storage::disk('public')->delete($comunicado->{$campo});
+                Storage::disk(config('filesystems.default'))->delete($comunicado->{$campo});
             }
         }
 

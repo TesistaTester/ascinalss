@@ -33,11 +33,11 @@ class ConvenioController extends Controller
         ]);
 
         if ($request->hasFile('conv_logo')) {
-            $datos['conv_logo'] = $request->file('conv_logo')->store('convenios/logos', 'public');
+            $datos['conv_logo'] = $request->file('conv_logo')->store('convenios/logos', config('filesystems.default'));
         }
 
         if ($request->hasFile('conv_pdf_archivo')) {
-            $datos['conv_pdf_archivo'] = $request->file('conv_pdf_archivo')->store('convenios/pdfs', 'public');
+            $datos['conv_pdf_archivo'] = $request->file('conv_pdf_archivo')->store('convenios/pdfs', config('filesystems.default'));
         }
 
         $datos['conv_estado'] = $request->boolean('conv_estado', true);
@@ -67,16 +67,16 @@ class ConvenioController extends Controller
 
         if ($request->hasFile('conv_logo')) {
             if ($convenio->conv_logo) {
-                Storage::disk('public')->delete($convenio->conv_logo);
+                Storage::disk(config('filesystems.default'))->delete($convenio->conv_logo);
             }
-            $datos['conv_logo'] = $request->file('conv_logo')->store('convenios/logos', 'public');
+            $datos['conv_logo'] = $request->file('conv_logo')->store('convenios/logos', config('filesystems.default'));
         }
 
         if ($request->hasFile('conv_pdf_archivo')) {
             if ($convenio->conv_pdf_archivo) {
-                Storage::disk('public')->delete($convenio->conv_pdf_archivo);
+                Storage::disk(config('filesystems.default'))->delete($convenio->conv_pdf_archivo);
             }
-            $datos['conv_pdf_archivo'] = $request->file('conv_pdf_archivo')->store('convenios/pdfs', 'public');
+            $datos['conv_pdf_archivo'] = $request->file('conv_pdf_archivo')->store('convenios/pdfs', config('filesystems.default'));
         }
 
         $datos['conv_estado'] = $request->boolean('conv_estado', true);

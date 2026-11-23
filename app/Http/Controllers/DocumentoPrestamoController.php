@@ -15,7 +15,7 @@ class DocumentoPrestamoController extends Controller
         $datos = $request->validate([
             'doc_tipo' => 'required|in:requisitos,contrato,formulario',
             'doc_etiqueta' => 'required|string|max:255',
-            'doc_pdf_archivo' => 'required|file|mimes:pdf|max:5120',
+            'doc_pdf_archivo' => 'required|file|mimes:pdf|mimetypes:application/pdf|max:5120',
             'doc_orden' => 'nullable|integer',
         ]);
 

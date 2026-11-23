@@ -23,7 +23,7 @@ class VerificarRol
         }
 
         // Convierte ['1','2'] (strings desde la ruta) a comparación segura
-        if (!in_array((string) $usuario->usu_rol, $rolesPermitidos)) {
+        if (!$usuario->usu_estado || !in_array((string) $usuario->usu_rol, $rolesPermitidos)) {
             abort(403, 'No tienes permiso para acceder a esta sección.');
         }
 

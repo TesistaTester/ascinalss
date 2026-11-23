@@ -18,9 +18,9 @@
     <div class="col-md-6">
         <label class="form-label">
             Contraseña
-            @if($usu) <span class="text-muted small">(deja en blanco para mantener la actual)</span> @endif
+            @if($usu) <span class="text-muted small">(deja en blanco para mantener la actual)</span> @else <span class="text-muted small">(mín. 8 caracteres, letras y números)</span> @endif
         </label>
-        <input type="password" name="password" class="form-control" {{ $usu ? '' : 'required' }} minlength="6">
+        <input type="password" name="password" class="form-control" {{ $usu ? '' : 'required' }} minlength="8">
     </div>
 
     <div class="col-md-3">
@@ -29,6 +29,7 @@
             <option value="1" @selected(old('usu_rol', $usu->usu_rol ?? '') == 1)>Admin</option>
             <option value="2" @selected(old('usu_rol', $usu->usu_rol ?? '') == 2)>Editor</option>
             <option value="3" @selected(old('usu_rol', $usu->usu_rol ?? '') == 3)>Directorio</option>
+            <option value="4" @selected(old('usu_rol', $usu->usu_rol ?? '') == 4)>Evaluador de préstamos</option>
         </select>
     </div>
 

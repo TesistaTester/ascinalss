@@ -25,7 +25,7 @@ class InformeAnualController extends Controller
         $datos = $request->validate([
             'inf_anio' => 'required|digits:4|integer',
             'inf_titulo' => 'required|string|max:255',
-            'inf_pdf_archivo' => 'required|file|mimes:pdf|max:10240',
+            'inf_pdf_archivo' => 'required|file|mimes:pdf|mimetypes:application/pdf|max:10240',
             'inf_fecha_publicacion' => 'nullable|date',
             'inf_estado' => 'nullable|boolean',
         ]);
@@ -48,7 +48,7 @@ class InformeAnualController extends Controller
         $datos = $request->validate([
             'inf_anio' => 'required|digits:4|integer',
             'inf_titulo' => 'required|string|max:255',
-            'inf_pdf_archivo' => 'nullable|file|mimes:pdf|max:10240',
+            'inf_pdf_archivo' => 'nullable|file|mimes:pdf|mimetypes:application/pdf|max:10240',
             'inf_fecha_publicacion' => 'nullable|date',
             'inf_estado' => 'nullable|boolean',
         ]);

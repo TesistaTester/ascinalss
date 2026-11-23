@@ -10,6 +10,7 @@
 <style>
 @include('publico._estilos')
 </style>
+@if(request()->routeIs('publico.inicio'))<link rel="stylesheet" href="{{ asset('css/prestamos.css') }}?v=100003">@endif
 </head>
 <body>
 @yield('contenido')
@@ -18,5 +19,8 @@
 <script>
 @include('publico._script')
 </script>
+@if(request()->routeIs('publico.inicio'))<script src="{{ asset('js/simulador-prestamos.js') }}?v=100003" defer></script>@endif
+<script src="{{ asset('js/tours.js') }}?v=100000"></script>
+@stack('scripts')
 </body>
 </html>

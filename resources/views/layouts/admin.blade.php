@@ -192,7 +192,6 @@
                     <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
             </li>
-
             @if(auth()->user()->esAdmin() || auth()->user()->esEditor())
                 <span class="sidebar-section-label">Contenido</span>
                 <li>
@@ -259,15 +258,18 @@
                     <div class="sidebar-user-nombre">{{ auth()->user()->usu_nombre_completo }}</div>
                     <div class="sidebar-user-rol">
                         @php
-                            $roles = [1 => 'Administrador', 2 => 'Editor', 3 => 'Directorio'];
+                            $roles = [1 => 'Administrador', 2 => 'Editor', 3 => 'Directorio', 4 => 'Evaluador de préstamos'];
                         @endphp
                         {{ $roles[auth()->user()->usu_rol] ?? 'Usuario' }}
                     </div>
                 </div>
             </div>
-            <a href="{{ url('/logout') }}" class="sidebar-logout">
-                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
-            </a>
+            <form method="POST" action="{{ route('logout') }}" class="d-inline w-100">
+                @csrf
+                <button type="submit" class="sidebar-logout w-100 border-0 bg-transparent text-start">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </button>
+            </form>
         </div>
     </nav>
 
@@ -316,6 +318,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('js/tours.js') }}"></script>
 @stack('scripts')
 </body>
 </html>

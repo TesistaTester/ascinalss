@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class UsuarioController extends Controller
 {
@@ -23,9 +24,9 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $datos = $request->validate([
-            'usu_rol' => 'required|integer|in:1,2,3',
+            'usu_rol' => 'required|integer|in:1,2,3,4',
             'usu_nombre' => 'required|string|max:255|unique:usuarios,usu_nombre',
-            'password' => 'required|string|min:6',
+            'password' => ['required', 'string', Password::min(8)->letters()->numbers()],
             'usu_nombre_completo' => 'required|string|max:255',
             'usu_estado' => 'nullable|boolean',
         ]);
@@ -46,9 +47,9 @@ class UsuarioController extends Controller
     public function update(Request $request, Usuario $usuario)
     {
         $datos = $request->validate([
-            'usu_rol' => 'required|integer|in:1,2,3',
+            'usu_rol' => 'required|integer|in:1,2,3,4',
             'usu_nombre' => 'required|string|max:255|unique:usuarios,usu_nombre,' . $usuario->usu_id . ',usu_id',
-            'password' => 'nullable|string|min:6',
+            'password' => ['nullable', 'string', Password::min(8)->letters()->numbers()],
             'usu_nombre_completo' => 'required|string|max:255',
             'usu_estado' => 'nullable|boolean',
         ]);

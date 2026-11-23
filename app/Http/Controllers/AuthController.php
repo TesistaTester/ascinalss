@@ -21,6 +21,9 @@ class AuthController extends Controller
         if (Auth::attempt(['usu_nombre' => $usr, 'password' => $pwd])) {
             $request->session()->regenerate();
             $usuario = Auth::user();
+            if ($usuario->esEvaluadorPrestamos()) {
+                return redirect()->route('presolicitudes.index');
+            }
 
             if ($usuario->usu_rol == '1') { // ADMIN
                 return redirect('dashboard');

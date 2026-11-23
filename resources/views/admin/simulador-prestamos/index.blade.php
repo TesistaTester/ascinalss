@@ -3,7 +3,8 @@
 @section('breadcrumb')<li class="breadcrumb-item active">Configuración</li>@endsection
 
 @section('contenido')
-<div class="alert alert-warning"><i class="bi bi-shield-exclamation me-1"></i> Confirma únicamente condiciones validadas por ASCINALSS. Los valores pendientes no producirán estimaciones falsas.</div>
+<div class="alert alert-info">El método aproximado y la capacidad referencial son supuestos de simulación, no una calificación institucional. Las tasas confirmadas deben contar con respaldo de ASCINALSS.</div>
+@if($errors->any())<div class="alert alert-danger">{{ $errors->first() }}</div>@endif
 <div class="accordion" id="productosSimulador">
 @foreach($productos as $producto)
 @php($par = $producto->parametro) @php($reg = $producto->reglaCapacidad)
@@ -44,8 +45,10 @@
    <div class="col-md-4"><label class="form-check"><input type="checkbox" class="form-check-input me-2" name="reg_liberar_cuota_refinanciada" value="1" @checked($reg?->reg_liberar_cuota_refinanciada)>Liberar cuota refinanciada</label></div>
    <div class="col-md-4"><label class="form-label">Estado de reglas</label><select class="form-select" name="reg_estado" required>@foreach(['PENDIENTE','CONFIRMADO','INFERIDO','HISTORICO'] as $v)<option @selected(($reg?->reg_estado ?? 'PENDIENTE') === $v)>{{ $v }}</option>@endforeach</select></div>
   </div>
+  @include('admin.simulador-prestamos._politica')
   <div class="text-end mt-4"><button class="btn btn-dark"><i class="bi bi-check2-circle me-1"></i>Guardar configuración</button></div>
- </form>
+</form>
+ <details class="mt-3"><summary>Historial de condiciones anteriores</summary><table class="table table-sm"><thead><tr><th>Fecha</th><th>Parámetro</th><th>Valor anterior</th><th>Origen</th></tr></thead><tbody>@foreach($producto->historial()->latest('his_id')->limit(30)->get() as $cambio)<tr><td>{{ $cambio->created_at }}</td><td>{{ $cambio->his_parametro }}</td><td style="overflow-wrap:anywhere">{{ $cambio->his_valor }}</td><td>{{ $cambio->his_fuente }}</td></tr>@endforeach</tbody></table></details>
  </div></div>
 </div>
 @endforeach

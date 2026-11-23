@@ -1,0 +1,3 @@
+<div class="sim-tabla"><table><thead><tr><th>Cuota</th><th>Vencimiento tentativo</th><th>Capital</th><th>Interés</th><th>Cargos incluidos</th><th>Total cuota</th><th>Saldo</th></tr></thead><tbody>
+@foreach($simulacion['plan'] as $fila)<tr><td>{{ $fila['numero'] }}</td><td>{{ $fila['fecha']??'Sin fecha' }}</td>@foreach(['capital','interes','cargos','cuota','saldo'] as $key)<td>{{ number_format($fila[$key],2,',','.') }}</td>@endforeach</tr>@endforeach
+</tbody><tfoot><tr><th colspan="2">Totales (Bs)</th>@foreach(['capital','interes','cargos','cuotas'] as $key)<th>{{ number_format($simulacion['totales'][$key],2,',','.') }}</th>@endforeach<th>0,00</th></tr></tfoot></table></div>

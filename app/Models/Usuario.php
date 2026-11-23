@@ -23,6 +23,12 @@ class Usuario extends Model implements AuthenticatableContract
     public const ROL_ADMIN = 1;
     public const ROL_EDITOR = 2;
     public const ROL_DIRECTORIO = 3;
+    public const ROL_EVALUADOR_PRESTAMOS = 4;
+
+    public function esEvaluadorPrestamos(): bool
+    {
+        return $this->usu_rol === self::ROL_EVALUADOR_PRESTAMOS;
+    }
 
     protected $fillable = [
         'usu_rol',

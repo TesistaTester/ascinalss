@@ -29,7 +29,7 @@
                         <td>{{ $usu->usu_nombre_completo }}</td>
                         <td>
                             @php
-                                $etiquetasRol = [1 => 'Admin', 2 => 'Editor', 3 => 'Directorio'];
+                                $etiquetasRol = [1 => 'Admin', 2 => 'Editor', 3 => 'Directorio', 4 => 'Evaluador de préstamos'];
                                 $coloresRol = [1 => 'bg-dark', 2 => 'bg-primary', 3 => 'bg-secondary'];
                             @endphp
                             <span class="badge {{ $coloresRol[$usu->usu_rol] ?? 'bg-secondary' }}">

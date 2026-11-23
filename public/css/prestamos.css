@@ -1,0 +1,446 @@
+.simulador-modal [hidden],.prestamo-admin [hidden]{display:none!important}
+.simulador-modal fieldset{border:0;padding:0;min-width:0}
+.simulador-modal section[data-paso]{display:block;min-height:0;height:auto;padding:0;margin:0;width:auto;position:static;overflow:visible}
+.simulador-modal #simTitulo{font-size:28px;line-height:1.25;margin:8px 0 0}
+.simulador-modal h4{font-size:20px;margin:16px 0}
+.simulador-modal .cerrar{font-size:28px;line-height:1}
+.simulador-modal legend{font-size:1.2rem;margin:18px 0;font-weight:bold}
+.simulador-modal .simulador-grid label,.prestamo-admin .simulador-grid label{display:flex;flex-direction:column;gap:7px;font-size:14px;line-height:1.5}
+.simulador-modal input:not([type=checkbox]),.simulador-modal select,.prestamo-admin input:not([type=checkbox]),.prestamo-admin select,.prestamo-admin textarea{width:100%;box-sizing:border-box;background:#fff;color:#182231;border:1px solid #c4cbd4;border-radius:8px;padding:10px;font:inherit}
+.simulador-modal p{font-size:13px;line-height:1.6}
+.simulador-modal #simResultado,.simulador-modal #simRevision,.simulador-modal #simRecibido{background:#f5f7fa;color:#182231;padding:18px;border-radius:10px;overflow-wrap:anywhere}
+.simulador-modal #simResultado p,.simulador-modal #simRevision p,.simulador-modal #simRecibido p{color:#182231}
+.sim-acciones{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.simulador-modal button:not(.cerrar),.sim-acciones a{display:inline-block;padding:11px 17px;border-radius:8px;border:1px solid #c9a15a;background:#c9a15a;color:#132033;font:inherit;cursor:pointer;text-decoration:none}
+.simulador-modal button:disabled{opacity:.55;cursor:wait}
+.sim-pasos{display:flex;list-style:none;padding:0;gap:8px;flex-wrap:wrap;margin:24px 0}
+.sim-pasos li{flex:1;min-width:100px;padding:10px;border-bottom:3px solid #64748b;font-size:12px}
+.sim-pasos li[aria-current]{border-color:#e0c088;color:#e0c088;font-weight:bold}
+.simulador-modal details{margin:18px 0;padding:12px;border:1px solid #718096;border-radius:8px}
+.simulador-modal summary{cursor:pointer}
+.sim-aceptacion{display:flex;gap:10px;align-items:flex-start;margin:18px 0;font-size:13px;line-height:1.6}
+.sim-aceptacion input{margin-top:5px;flex:none;width:18px;height:18px}
+.sim-tabla{overflow-x:auto;margin-top:18px;background:white;color:#172334;border-radius:8px}
+.sim-tabla table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
+.sim-tabla th,.sim-tabla td{padding:9px;text-align:right;border-bottom:1px solid #ccd3dd}
+.prestamo-admin .simulador-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.prestamo-admin details{margin:16px 0}
+@media(max-width:600px){.sim-pasos li{min-width:90px}.prestamo-admin .simulador-grid{grid-template-columns:1fr}.sim-acciones>*{flex:1;text-align:center}}
+@media(prefers-reduced-motion:reduce){.simulador-modal *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+/* Ajustes para tour interactivo Driver.js sobre el modal */
+.driver-popover {
+    z-index: 100000 !important;
+    font-family: inherit;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+}
+.driver-popover-title {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+}
+.driver-popover-description {
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    color: #334155 !important;
+}
+.driver-popover-footer button {
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+}
+.driver-active-element {
+    z-index: 100001 !important;
+    position: relative !important;
+}
+
+/* Tooltip flotante contextual al hacer clic / enfocar campos */
+.sim-tooltip-contextual {
+    position: absolute;
+    background: #ffffff;
+    color: #1e293b;
+    padding: 12px 15px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    max-width: 290px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), 0 0 0 1.5px #c9a15a;
+    z-index: 99999;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sim-tooltip-contextual.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.sim-tooltip-contextual-titulo {
+    font-weight: 700;
+    color: #946f28;
+    margin-bottom: 4px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.sim-tooltip-contextual-titulo::before {
+    content: "ℹ";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 11px;
+    font-weight: bold;
+}
+.sim-tooltip-contextual-desc {
+    color: #334155;
+    margin: 0;
+}
+
+/* --- NUEVA PRESENTACIÓN UI/UX DE LA ESTIMACIÓN --- */
+.sim-resultado-container {
+    background: #ffffff;
+    color: #1e293b;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    margin-top: 10px;
+}
+
+/* Banner de estado de evaluación */
+.sim-status-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin-bottom: 22px;
+}
+.sim-status-icono {
+    font-size: 28px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.sim-status-info {
+    flex: 1;
+}
+.sim-status-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+}
+.sim-status-titulo {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+.sim-status-mensaje {
+    font-size: 13.5px;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Variantes de estado */
+.sim-status--compatible {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #065f46;
+}
+.sim-status--compatible .sim-status-icono { color: #059669; }
+.sim-status--compatible .sim-status-badge { background: #d1fae5; color: #065f46; }
+.sim-status--compatible .sim-status-titulo { color: #064e3b; }
+.sim-status--compatible .sim-status-mensaje { color: #047857; }
+
+.sim-status--supera {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+}
+.sim-status--supera .sim-status-icono { color: #d97706; }
+.sim-status--supera .sim-status-badge { background: #fef3c7; color: #92400e; }
+.sim-status--supera .sim-status-titulo { color: #78350f; }
+.sim-status--supera .sim-status-mensaje { color: #b45309; }
+
+.sim-status--incumple {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+}
+.sim-status--incumple .sim-status-icono { color: #dc2626; }
+.sim-status--incumple .sim-status-badge { background: #fee2e2; color: #991b1b; }
+.sim-status--incumple .sim-status-titulo { color: #7f1d1d; }
+.sim-status--incumple .sim-status-mensaje { color: #b91c1c; }
+
+.sim-status--evaluacion {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+}
+.sim-status--evaluacion .sim-status-icono { color: #2563eb; }
+.sim-status--evaluacion .sim-status-badge { background: #dbeafe; color: #1e40af; }
+.sim-status--evaluacion .sim-status-titulo { color: #1e3a8a; }
+.sim-status--evaluacion .sim-status-mensaje { color: #1d4ed8; }
+
+/* Hero Cuota Mensual */
+.sim-cuota-destacada {
+    background: linear-gradient(135deg, #0d1420 0%, #172438 100%);
+    border: 1.5px solid #c9a15a;
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 22px;
+    color: #ffffff;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(13, 20, 32, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+.sim-cuota-destacada::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(201, 161, 90, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+.sim-cuota-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+.sim-cuota-label {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #e0c088;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.sim-cuota-badge {
+    background: rgba(201, 161, 90, 0.2);
+    color: #f7e7c4;
+    border: 1px solid rgba(201, 161, 90, 0.4);
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+.sim-cuota-monto {
+    font-size: 36px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 8px 0;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+.sim-cuota-subtexto {
+    font-size: 12.5px;
+    color: rgba(255, 255, 255, 0.75);
+}
+.sim-cuota-subtexto strong {
+    color: #e0c088;
+}
+
+/* Grid de métricas financieras (KPIs) */
+.sim-resumen-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+}
+.sim-card-kpi {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.sim-card-kpi:hover {
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+}
+.sim-kpi-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(201, 161, 90, 0.14);
+    color: #946f28;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+.sim-kpi-content {
+    flex: 1;
+    min-width: 0;
+}
+.sim-kpi-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    display: block;
+    margin-bottom: 2px;
+}
+.sim-kpi-val {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+    display: block;
+    line-height: 1.25;
+}
+.sim-kpi-sub {
+    font-size: 11px;
+    color: #94a3b8;
+    display: block;
+    margin-top: 3px;
+}
+
+/* Alerta de sugerencia de plazo */
+.sim-alerta-sugerencia {
+    background: #fefce8;
+    border: 1px solid #fef08a;
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    color: #854d0e;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 22px;
+}
+.sim-alerta-sugerencia i {
+    font-size: 20px;
+    color: #ca8a04;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* Observaciones y Notas Institucionales */
+.sim-notas-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 18px 20px;
+}
+.sim-notas-titulo {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #334155;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.sim-notas-titulo i {
+    color: #c9a15a;
+    font-size: 15px;
+}
+.sim-notas-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.sim-notas-lista li {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: #475569;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+.sim-notas-lista li i {
+    color: #059669;
+    font-size: 15px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* Botones de acción en la estimación */
+.sim-acciones-estimacion {
+    margin-top: 18px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.btn-sim-primario {
+    background: #c9a15a !important;
+    color: #0d1420 !important;
+    border: 1px solid #c9a15a !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 10px 18px !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+}
+.btn-sim-primario:hover {
+    background: #dbb36c !important;
+    transform: translateY(-1px);
+}
+.btn-sim-secundario {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 10px 18px !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.btn-sim-secundario:hover {
+    background: rgba(255, 255, 255, 0.16) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+@media (max-width: 640px) {
+    .sim-resultado-container {
+        padding: 16px;
+    }
+    .sim-resumen-grid {
+        grid-template-columns: 1fr;
+    }
+    .sim-cuota-monto {
+        font-size: 28px;
+    }
+    .sim-cuota-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

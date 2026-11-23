@@ -13,6 +13,7 @@ use App\Http\Controllers\DocumentoPrestamoController;
 use App\Http\Controllers\PublicoController;
 use App\Http\Controllers\SimuladorPrestamoController;
 use App\Http\Controllers\ConfiguracionSimuladorController;
+use App\Http\Controllers\AporteAfiliadoController;
 
 /*
 ----------------------------------------
@@ -23,7 +24,20 @@ Route::get('/', [PublicoController::class, 'index'])->name('publico.inicio');
 Route::get('/web/filiales', [PublicoController::class, 'filiales'])->name('publico.filiales');
 Route::get('/web/comunicados', [PublicoController::class, 'comunicados'])->name('publico.comunicados');
 Route::get('/web/informe-anual', [PublicoController::class, 'informeAnual'])->name('publico.informe-anual');
-Route::post('/prestamos/simular', [SimuladorPrestamoController::class, 'simular'])->name('prestamos.simular');
+Route::post('/prestamos/simular', [SimuladorPrestamoController::class, 'simular'])->middleware('throttle:30,1')->name('prestamos.simular');
+Route::get('/web/prestamos/plan/{simulacion}', [SimuladorPrestamoController::class, 'plan'])->whereUuid('simulacion')->name('prestamos.plan');
+
+/*
+----------------------------------------
+* RUTAS: CONSULTA DE APORTES (Afiliados)
+----------------------------------------
+*/
+Route::prefix('aportes')->name('aportes.')->group(function () {
+    Route::get('/consulta', [AporteAfiliadoController::class, 'formularioLogin'])->name('login');
+    Route::post('/consulta', [AporteAfiliadoController::class, 'autenticar'])->middleware('throttle:15,1')->name('autenticar');
+    Route::get('/estado-cuenta', [AporteAfiliadoController::class, 'estadoCuenta'])->name('estado-cuenta');
+    Route::post('/salir', [AporteAfiliadoController::class, 'cerrarSesion'])->name('salir');
+});
 /*
 ----------------------------------------
 * RUTAS: AUTENTICACIÓN
@@ -33,8 +47,8 @@ Route::get('/acceso', function () {
     return view('publico.login', ['titulo' => 'Acceso al sistema']);
 })->name('login');
 
-Route::get('/logout', [AuthController::class, 'logout']);
-Route::post('/auth', [AuthController::class, 'autenticar']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/auth', [AuthController::class, 'autenticar'])->middleware('throttle:5,1')->name('auth.login');
 
 /*
 ----------------------------------------
@@ -42,7 +56,7 @@ Route::post('/auth', [AuthController::class, 'autenticar']);
 ----------------------------------------
 */
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('rol:1,2,3')->name('dashboard');
 
     // Editor (2) y Admin (1) pueden gestionar contenido público
     Route::middleware('rol:1,2')->group(function () {

@@ -27,7 +27,7 @@ class ConvenioController extends Controller
             'conv_descripcion' => 'nullable|string',
             'conv_empresa' => 'nullable|string|max:255',
             'conv_logo' => 'nullable|image|max:2048',
-            'conv_pdf_archivo' => 'nullable|file|mimes:pdf|max:5120',
+            'conv_pdf_archivo' => 'nullable|file|mimes:pdf|mimetypes:application/pdf|max:5120',
             'conv_orden' => 'nullable|integer',
             'conv_estado' => 'nullable|boolean',
         ]);
@@ -60,7 +60,7 @@ class ConvenioController extends Controller
             'conv_descripcion' => 'nullable|string',
             'conv_empresa' => 'nullable|string|max:255',
             'conv_logo' => 'nullable|image|max:2048',
-            'conv_pdf_archivo' => 'nullable|file|mimes:pdf|max:5120',
+            'conv_pdf_archivo' => 'nullable|file|mimes:pdf|mimetypes:application/pdf|max:5120',
             'conv_orden' => 'nullable|integer',
             'conv_estado' => 'nullable|boolean',
         ]);

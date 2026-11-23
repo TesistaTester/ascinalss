@@ -16,6 +16,7 @@ class ProductoSimulador extends Model
     protected $guarded = [];
 
     protected $casts = [
+        'pro_reglas_simulacion' => 'array',
         'pro_monto_minimo' => 'decimal:2', 'pro_monto_maximo' => 'decimal:2',
         'pro_requiere_garantes' => 'boolean', 'pro_considera_antiguedad' => 'boolean',
         'pro_activo' => 'boolean', 'pro_vigente_desde' => 'date', 'pro_vigente_hasta' => 'date',

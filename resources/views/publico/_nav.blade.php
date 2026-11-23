@@ -10,6 +10,7 @@
         <li><a href="{{ route('publico.comunicados') }}"><span>Comunicados</span></a></li>
         <li><a href="{{ route('publico.informe-anual') }}"><span>Informe Anual</span></a></li>
         <li><a href="{{ route('publico.inicio') }}#contacto"><span>Contacto</span></a></li>
+        <li><a href="{{ route('aportes.login') }}" style="color: #c9a15a; font-weight: 600;"><span>Mis Aportes</span></a></li>
         <li>
             <a href="https://registro.ascinalss.org" target="_blank" class="intranet-btn">
                 <span>Intranet <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px;"></i></span>
@@ -26,6 +27,7 @@
     <a href="{{ route('publico.comunicados') }}">Comunicados</a>
     <a href="{{ route('publico.informe-anual') }}">Informe Anual</a>
     <a href="{{ route('publico.inicio') }}#contacto">Contacto</a>
+    <a href="{{ route('aportes.login') }}" style="color: #c9a15a;">Mis Aportes</a>
     <a href="https://registro.ascinalss.org" target="_blank" class="intranet-btn">Intranet</a>
 </div>
 

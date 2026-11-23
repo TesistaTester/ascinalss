@@ -346,4 +346,16 @@ sudo certbot --nginx -d ascinalss.org -d www.ascinalss.org
 
 ---
 
+## 16. Simulador y presolicitudes (septiembre 2026)
+
+- Alcance autorizado: calculadora de la página inicial, configuración y preparación de presolicitudes en oficina. El sistema externo `registro.ascinalss.org` permanece independiente.
+- Nuevo rol entero `4`: Evaluador de préstamos (`evaluador-prestamos`), acceso solo a `/presolicitudes`; administrador conserva configuración y gestión de usuarios.
+- `LoanPolicy` contiene los criterios iniciales y condiciones de uso; `pro_reglas_simulacion` permite ajustes por producto. Capacidad provisional autorizada: `max(0, min(0.75 * liquido_ajustado, liquido_ajustado - 825))`, identificada como supuesto configurable.
+- Las presolicitudes y revisiones usan prefijos `pre_` y `rev_`, SoftDeletes y campos personales cifrados. Conservar APP_KEY. El envío original no se sobrescribe.
+- Solo una simulación compatible, conservada en la sesión y comprobada por el servidor, habilita envío. El evaluador revisa, completa y recalcula sin aprobar el préstamo.
+- El modal usa un stepper propio, GSAP opcional y movimiento reducido; CSS/JS del módulo se cargan únicamente en la página inicial. Impresión compartida para plan y formulario.
+- No confundir recepción digital con validación de documentación completa: solo esta última inicia el plazo de atención del artículo 24.
+- Activación, límites y pruebas: `docs/simulador-presolicitudes.md`.
+- **Actualización Noviembre 2026**: Módulo de presolicitudes archivado en `docs/archivo-presolicitudes.md`. Se eliminó el paso 4 y toda recepción digital de solicitudes del sitio web y panel admin; el simulador opera exclusivamente en 3 pasos con presentación gráfica de estimación (KPIs, cuota hero, badges y plan en PDF).
+
 *AGENTS.md generado en agosto 2026 · MentorHub Factory · Jay*
